@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
-import { Tag } from 'src/entities/tag';
+import { Tag } from 'src/entities/tag.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
 import { Post } from 'src/entities/post.entity';
 import { Comment } from 'src/entities/comment.entity';

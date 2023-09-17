@@ -5,10 +5,12 @@ import { PostsRepository } from './posts.repository';
 import { Post } from 'src/entities/post.entity';
 import { Comment } from 'src/entities/comment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Tag } from 'src/entities/tag.entity';
+import { TagsRepository } from 'src/tags/tags.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment])],
+  imports: [TypeOrmModule.forFeature([Post, Comment, Tag])],
   controllers: [PostsController],
-  providers: [PostsService, PostsRepository],
+  providers: [PostsService, PostsRepository, TagsRepository],
 })
 export class PostsModule {}
