@@ -20,7 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.configService.get<string>('DATABASE_NAME'),
       entities: [Post, Tag, Post_Tag, Comment],
       logging: true,
-      synchronize: false,
+      //   synchronize: true,
       extra: {
         ssl: { rejectUnauthorized: false },
       },

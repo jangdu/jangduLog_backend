@@ -13,6 +13,28 @@ export class PostsService {
     private dataSource: DataSource,
   ) {}
 
+  async getByPageAndTag(page, tagId) {
+    const postsPerPage = 10; // 페이지당 게시물 수
+    const skip = (page - 1) * postsPerPage;
+
+    const query = this.postsRepository.createQueryBuilder('post');
+
+    if (tagId) {
+      // 태그 필터링을 추가
+      query.innerJoin('post.post_tag', 'post_tag', 'post_tag.tagId = :tagId', {
+        tagId,
+      });
+    }
+
+    const posts = await query
+      .orderBy('post.createdAt', 'DESC')
+      .skip(skip)
+      .take(postsPerPage)
+      .getMany();
+
+    return posts;
+  }
+
   async create(title, content, imgUrl, tagList) {
     // console.log(newTagList);
 

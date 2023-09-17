@@ -1,11 +1,4 @@
-import {
-  ManyToOne,
-  OneToOne,
-  OneToMany,
-  Column,
-  Entity,
-  JoinColumn,
-} from 'typeorm';
+import { OneToMany, Column, Entity } from 'typeorm';
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CommonEntity } from './common.entity';
