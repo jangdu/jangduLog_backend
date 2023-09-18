@@ -44,10 +44,9 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.post_tag', 'post_tag')
       .leftJoinAndSelect('post_tag.tag', 'tag')
+      .leftJoinAndSelect('post.comment', 'comment')
       .where('post.id = :id', { id: postId })
       .getOne();
-
-    console.log(post);
 
     return post;
   }
