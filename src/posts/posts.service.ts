@@ -16,14 +16,18 @@ export class PostsService {
   async getByPageAndTag(page, tagId) {
     const postsPerPage = 10; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
+    console.log(tagId);
 
     const query = this.postsRepository.createQueryBuilder('post');
 
+    // 모든 태그 정보 가져오기
+    query
+      .leftJoinAndSelect('post.post_tag', 'post_tag')
+      .leftJoinAndSelect('post_tag.tag', 'tag');
+
     if (tagId) {
       // 태그 필터링을 추가
-      query.innerJoin('post.post_tag', 'post_tag', 'post_tag.tagId = :tagId', {
-        tagId,
-      });
+      query.where('post_tag.tagId = :tagId', { tagId });
     }
 
     const posts = await query
