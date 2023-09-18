@@ -39,6 +39,19 @@ export class PostsService {
     return posts;
   }
 
+  async getById(postId) {
+    const post = await this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.post_tag', 'post_tag')
+      .leftJoinAndSelect('post_tag.tag', 'tag')
+      .where('post.id = :id', { id: postId })
+      .getOne();
+
+    console.log(post);
+
+    return post;
+  }
+
   async create(title, content, imgUrl, tagList) {
     // console.log(newTagList);
 

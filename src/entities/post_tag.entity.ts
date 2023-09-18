@@ -1,4 +1,10 @@
-import { Column, ManyToOne, Entity, JoinColumn } from 'typeorm';
+import {
+  Column,
+  ManyToOne,
+  Entity,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
@@ -6,7 +12,14 @@ import { Post } from './post.entity';
 import { Tag } from './tag.entity';
 
 @Entity({ schema: '', name: 'post_tag' })
-export class Post_Tag extends CommonEntity {
+export class Post_Tag {
+  @ApiProperty({
+    name: 'id',
+    description: 'Primary key as Entity id',
+  })
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @IsNumber()
   @ApiProperty({
     example: 1,
