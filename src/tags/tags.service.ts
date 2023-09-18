@@ -6,6 +6,12 @@ import { Tag } from 'src/entities/tag.entity';
 export class TagsService {
   constructor(private tagsRepository: TagsRepository) {}
 
+  async getAll() {
+    const allTags = await this.tagsRepository.find();
+
+    return allTags;
+  }
+
   async findOrCreateTag(name: string): Promise<Tag> {
     // 이름으로 태그를 찾거나 생성합니다.
     let tag = await this.tagsRepository.findByName(name);
