@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 
-@Controller('/posts/:postId/comments')
+@Controller('api/posts/:postId/comments')
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 

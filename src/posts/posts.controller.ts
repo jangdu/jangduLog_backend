@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostRequestDto } from './dto/post.request.dto';
 
-@Controller('posts')
+@Controller('api/posts')
 export class PostsController {
   constructor(private postsService: PostsService) {}
 
