@@ -19,6 +19,7 @@ async function bootstrap() {
     origin: [
       'https://jangdu.site',
       'https://blog.jangdu.site',
+      'https://blog.jangdu.me',
       'http://localhost:3000',
       'http://jangdu.site-front.s3-website.ap-northeast-2.amazonaws.com/',
     ],
