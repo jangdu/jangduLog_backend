@@ -1,5 +1,10 @@
 import { TagsRepository } from './../tags/tags.repository';
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PostsRepository } from './posts.repository';
 import { DataSource } from 'typeorm';
 import { Post } from 'src/entities/post.entity';
@@ -16,27 +21,36 @@ export class PostsService {
   async getByPageAndTag(page, tagId) {
     const postsPerPage = 10; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
-    console.log(tagId);
 
     const query = this.postsRepository.createQueryBuilder('post');
 
     // 모든 태그 정보 가져오기
-    query
-      .leftJoinAndSelect('post.post_tag', 'post_tag')
-      .leftJoinAndSelect('post_tag.tag', 'tag');
+    query.leftJoinAndSelect('post.post_tag', 'post_tag');
 
     if (tagId) {
       // 태그 필터링을 추가
       query.where('post_tag.tagId = :tagId', { tagId });
     }
 
-    const posts = await query
-      .orderBy('post.createdAt', 'DESC')
-      .skip(skip)
-      .take(postsPerPage)
-      .getMany();
+    try {
+      const posts = await query
+        .orderBy('post.createdAt', 'DESC')
+        .select([
+          'post.id',
+          'post.createdAt',
+          'post.updatedAt',
+          'post.title',
+          'post.imgUrl',
+          'post_tag.tag',
+        ])
+        .skip(skip)
+        .take(postsPerPage)
+        .getMany();
 
-    return posts;
+      return posts;
+    } catch (error) {
+      throw new InternalServerErrorException('서버에러');
+    }
   }
 
   async getById(postId) {

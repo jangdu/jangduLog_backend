@@ -15,6 +15,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  app.enableCors({
+    origin: ['https://jangdu.site', 'http://localhost:3000'],
+    credentials: true, // 요청에 쿠키 정보를 함께 보냄
+  });
+
   const port = process.env.PORT || 3000;
 
   // class validator 전역 적용
@@ -22,7 +27,6 @@ async function bootstrap() {
   // // httpExceptionfilter활성화 예외처리 전역 필터 설정
   // app.useGlobalFilters(new HttpExceptionFilter());
   // cors 설정
-  app.enableCors();
 
   await app.listen(port);
 
