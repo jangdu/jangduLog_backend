@@ -16,7 +16,12 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   app.enableCors({
-    origin: ['https://jangdu.site', 'http://localhost:3000'],
+    origin: [
+      'https://jangdu.site',
+      'https://blog.jangdu.site',
+      'http://localhost:3000',
+      'http://jangdu.site-front.s3-website.ap-northeast-2.amazonaws.com/',
+    ],
     credentials: true, // 요청에 쿠키 정보를 함께 보냄
   });
 
