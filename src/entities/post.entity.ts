@@ -1,11 +1,4 @@
-import {
-  ManyToOne,
-  OneToOne,
-  OneToMany,
-  Column,
-  Entity,
-  JoinColumn,
-} from 'typeorm';
+import { OneToMany, Column, Entity } from 'typeorm';
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CommonEntity } from './common.entity';
@@ -38,7 +31,7 @@ export class Post extends CommonEntity {
     description: '게시글 이미지',
     required: true,
   })
-  @Column('varchar')
+  @Column('text')
   imgUrl: string;
 
   @OneToMany(() => Post_Tag, (post_tag) => post_tag.post)
