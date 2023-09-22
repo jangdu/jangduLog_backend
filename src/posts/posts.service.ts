@@ -1,7 +1,6 @@
 import { TagsRepository } from './../tags/tags.repository';
 import {
   BadGatewayException,
-  HttpException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -18,7 +17,7 @@ export class PostsService {
     private dataSource: DataSource,
   ) {}
 
-  async getByPageAndTag(page, tagId) {
+  async getByPageAndTag(page, tagId): Promise<Post[]> {
     const postsPerPage = 10; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
 
@@ -65,7 +64,7 @@ export class PostsService {
     return post;
   }
 
-  async create(title, content, imgUrl, tagList) {
+  async create(title, content, imgUrl, tagList): Promise<string> {
     // console.log(newTagList);
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -92,7 +91,6 @@ export class PostsService {
             });
         }),
       );
-      // await queryRunner.manager.getRepository(UserEntity).save(user);
 
       await queryRunner.commitTransaction();
     } catch (error) {

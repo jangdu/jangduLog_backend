@@ -23,7 +23,6 @@ export class TagsRepository extends Repository<Tag> {
       tag = await this.create({ name });
       await this.save(tag);
     }
-    // console.log(tag);
 
     return tag;
   }

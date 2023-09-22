@@ -1,13 +1,14 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostRequestDto } from './dto/post.request.dto';
+import { Post as PostEntity } from 'src/entities/post.entity';
 
 @Controller('api/posts')
 export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get()
-  async getAll(@Query() query) {
+  async getAll(@Query() query): Promise<PostEntity[]> {
     let { page, tagId } = query;
 
     if (page === null || page === undefined) {
@@ -34,7 +35,7 @@ export class PostsController {
   }
 
   @Post()
-  async create(@Body() body: CreatePostRequestDto) {
+  async create(@Body() body: CreatePostRequestDto): Promise<string> {
     const { title, content, imgUrl, tagList } = body;
 
     const createdMessage = await this.postsService.create(
