@@ -1,6 +1,7 @@
 import { TagsRepository } from './../tags/tags.repository';
 import {
   BadGatewayException,
+  Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -8,10 +9,12 @@ import { PostsRepository } from './posts.repository';
 import { DataSource } from 'typeorm';
 import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
+import { RedisClientType } from 'redis';
 
 @Injectable()
 export class PostsService {
   constructor(
+    @Inject('REDIS_CLIENT') private readonly redis: RedisClientType,
     private postsRepository: PostsRepository,
     private tagsRepository: TagsRepository,
     private dataSource: DataSource,
