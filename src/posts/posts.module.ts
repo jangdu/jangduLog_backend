@@ -7,9 +7,10 @@ import { Comment } from 'src/entities/comment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tag } from 'src/entities/tag.entity';
 import { TagsRepository } from 'src/tags/tags.repository';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment, Tag])],
+  imports: [TypeOrmModule.forFeature([Post, Comment, Tag]), RedisModule],
   controllers: [PostsController],
   providers: [PostsService, PostsRepository, TagsRepository],
 })

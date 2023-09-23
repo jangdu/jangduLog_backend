@@ -1,7 +1,7 @@
 import { TagsRepository } from './../tags/tags.repository';
 import {
   BadGatewayException,
-  HttpException,
+  Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -9,16 +9,18 @@ import { PostsRepository } from './posts.repository';
 import { DataSource } from 'typeorm';
 import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
+import { RedisClientType } from 'redis';
 
 @Injectable()
 export class PostsService {
   constructor(
+    @Inject('REDIS_CLIENT') private readonly redis: RedisClientType,
     private postsRepository: PostsRepository,
     private tagsRepository: TagsRepository,
     private dataSource: DataSource,
   ) {}
 
-  async getByPageAndTag(page, tagId) {
+  async getByPageAndTag(page, tagId): Promise<Post[]> {
     const postsPerPage = 10; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
 
@@ -65,7 +67,7 @@ export class PostsService {
     return post;
   }
 
-  async create(title, content, imgUrl, tagList) {
+  async create(title, content, imgUrl, tagList): Promise<string> {
     // console.log(newTagList);
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -92,7 +94,6 @@ export class PostsService {
             });
         }),
       );
-      // await queryRunner.manager.getRepository(UserEntity).save(user);
 
       await queryRunner.commitTransaction();
     } catch (error) {
