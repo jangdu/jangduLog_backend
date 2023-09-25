@@ -64,7 +64,9 @@ export class PostsService {
       .where('post.id = :id', { id: postId })
       .getOne();
 
-    return post;
+    const views = await this.incrementPostViews(postId);
+
+    return { ...post, views };
   }
 
   async create(title, content, imgUrl, tagList): Promise<string> {
@@ -105,5 +107,20 @@ export class PostsService {
 
     return '포스트가 생성되었습니다.';
     // return newTagList;
+  }
+
+  // 레디스 조회수 올려주기
+  async incrementPostViews(postId: number): Promise<number> {
+    const redisKey = `post:${postId}:views`;
+    // 레디스에서 현재 조회수 가져오기
+    const currentViews = await this.redis.get(redisKey);
+
+    // 조회수가 없으면 1로 초기값 설정
+    const newViews = currentViews ? parseInt(currentViews) + 1 : 1;
+
+    // 레디스에 조회수 업데이트
+    await this.redis.set(redisKey, newViews);
+
+    return newViews;
   }
 }
