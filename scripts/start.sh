@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
 cd /home/ubuntu/app
 
-pm2 delete project
-pm2 start dist/main.js --name project -- start
+pm2 reload project
 
-echo "$TIME_NOW > Deploy has been completed"
+echo "> Deploy has been completed"
