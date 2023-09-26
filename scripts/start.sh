@@ -17,7 +17,7 @@ pm2 delete project
 
 # 로그 파일에 로그 메시지를 추가합니다.
 echo "$TIME_NOW > Starting PM2 process: project" >> "$LOG_FILE"
-pm2 start /home/ubuntu/app/dist/main.js --name project
+pm2 start dist/main.js --name project
 
 # 로그 파일에 로그 메시지를 추가합니다.
 echo "$TIME_NOW > Deploy has been completed" >> "$LOG_FILE"
