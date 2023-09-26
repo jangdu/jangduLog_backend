@@ -66,6 +66,8 @@ export class PostsService {
 
     const views = await this.incrementPostViews(postId);
 
+    console.log(views);
+
     return { ...post, views };
   }
 
@@ -111,6 +113,7 @@ export class PostsService {
 
   // 레디스 조회수 올려주기
   async incrementPostViews(postId: number): Promise<number> {
+    console.log('들어오긴 했음');
     const redisKey = `post:${postId}:views`;
     // 레디스에서 현재 조회수 가져오기
     const currentViews = await this.redis.get(redisKey);
