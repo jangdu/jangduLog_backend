@@ -1,6 +1,13 @@
-#!/bin/bash
-cd /home/ubuntu/app
+#!/usr/bin/env bash
 
-pm2 reload project
+PROJECT_ROOT="/home/ubuntu/app"
+APP_NAME="project"
 
-echo "> Deploy has been completed"
+TIME_NOW=$(date +%c)
+
+cd $PROJECT_ROOT
+
+pm2 delete $APP_NAME
+pm2 start npm --name $APP_NAME -- start
+
+echo "$TIME_NOW > Deploy has been completed"
