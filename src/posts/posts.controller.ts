@@ -27,6 +27,7 @@ export class PostsController {
 
   @Get(':postId')
   async getById(@Param() param) {
+    console.log('aaafjweiaoefoawefnjoajwfoajwofjaowjfoajo');
     const { postId } = param;
 
     const post = await this.postsService.getById(postId);

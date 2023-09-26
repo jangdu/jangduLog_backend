@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
+cd /home/ubuntu/app
 
-PROJECT_ROOT="/home/ubuntu/app"
-APP_NAME="project"
-
-TIME_NOW=$(date +%c)
-
-cd $PROJECT_ROOT
-
-pm2 delete $APP_NAME
-pm2 start dist/main.js --name $APP_NAME -- start
+pm2 delete project
+pm2 start dist/main.js --name project -- start
 
 echo "$TIME_NOW > Deploy has been completed"
