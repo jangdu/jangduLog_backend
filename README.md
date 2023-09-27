@@ -1,73 +1,36 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# JangduLog
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### **개인 블로그 프로젝트 (2023 3월 ~ (진행중))**
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+개발 잘하시는 분들이 운영하시는 개인 블로그에 대한 동경으로 시작한 개인블로그 프로젝트
 
-## Description
+- URL: [https://blog.jangdu.site](https://blog.jangdu.site/)
+- Github 주소 : [https://github.com/Drinkit-project](https://github.com/Drinkit-project)
+  - backend : [https://github.com/jangdu/jangduLog_backend](https://github.com/jangdu/jangduLog_backend)
+  - frontend : [https://github.com/jangdu/jangduLog_frontend](https://github.com/jangdu/jangduLog_frontend)
+- RestAPI 문서 : [https://jangdu.site/api/docs](https://jangdu.site/api/docs)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### **주요 기술**
 
-## Installation
+- typescript, nest.js, React.js, MySQL,
+- tailwindCSS
+- AWS : EC2, S3, CloudFront, CodeDeploy
+- Redis
 
-```bash
-$ npm install
-```
+### **아키텍쳐 패턴**
 
-## Running the app
+![Untitled](JangduLog%209ac3a31d938e473ca1d64b60b3cd066e/Untitled.png)
 
-```bash
-# development
-$ npm run start
+### **주요 구현 내용**
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- ReactJS, firebase를 사용해서 프론트엔드 구현( 2023.03 )
+- **firebase -> nest.js**
+  - firebase를 사용해 간단한 DB를 구축했지만,
+    이후 데이터관리 및 기능 추가 시 불편한 문제 발생
+    **->** **nest.js, mysql(typeorm)로 백엔드 구현 ( 2023.09 ~ )**
+- CloudFront, S3, EC2, RDS를 사용한 배포
+  - 반복적인 빌드, 배포의 불편
+    **->** CodeDeploy를 사용해 **CI/CD** **배포 자동화를 통해 효율적인 개발 환경 구성** ([https://blog.jangdu.site/posts/7](https://blog.jangdu.site/posts/7))
+- **Redis :** 가장 조회가 많이 일어나는 첫 페이지를 캐싱해 응답속도 개선 **( 240ms -> 92ms )**
+- LoggerMiddleware를 사용해 api 모니터링
+- nestjs/swagger를 사용해 편리한 API문서 작성 ([https://jangdu.site/api/docs](https://jangdu.site/api/docs))
