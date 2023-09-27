@@ -5,7 +5,7 @@
 개발 잘하시는 분들이 운영하시는 개인 블로그에 대한 동경으로 시작한 개인블로그 프로젝트
 
 - URL: [https://blog.jangdu.site](https://blog.jangdu.site/)
-- Github 주소 : [https://github.com/Drinkit-project](https://github.com/Drinkit-project)
+- Github 주소
   - backend : [https://github.com/jangdu/jangduLog_backend](https://github.com/jangdu/jangduLog_backend)
   - frontend : [https://github.com/jangdu/jangduLog_frontend](https://github.com/jangdu/jangduLog_frontend)
 - RestAPI 문서 : [https://jangdu.site/api/docs](https://jangdu.site/api/docs)
