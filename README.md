@@ -19,7 +19,7 @@
 
 ### **아키텍쳐 패턴**
 
-![Untitled](JangduLog%209ac3a31d938e473ca1d64b60b3cd066e/Untitled.png)
+![Untitled](https://res.cloudinary.com/dyhnnmhcf/image/upload/v1695778101/BlogProject_un6zix.png)
 
 ### **주요 구현 내용**
 
