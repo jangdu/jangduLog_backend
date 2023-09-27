@@ -21,7 +21,7 @@ export class PostsService {
   ) {}
 
   async getByPageAndTag(page: number, tagId: number): Promise<Post[]> {
-    const postsPerPage = 10; // 페이지당 게시물 수
+    const postsPerPage = 50; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
 
     const query = this.postsRepository.createQueryBuilder('post');
