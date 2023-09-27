@@ -8,10 +8,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tag } from 'src/entities/tag.entity';
 import { TagsRepository } from 'src/tags/tags.repository';
 import { RedisModule } from 'src/redis/redis.module';
+import { RanksController } from './rank.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post, Comment, Tag]), RedisModule],
-  controllers: [PostsController],
+  controllers: [PostsController, RanksController],
   providers: [PostsService, PostsRepository, TagsRepository],
 })
 export class PostsModule {}

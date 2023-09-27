@@ -131,4 +131,24 @@ export class PostsService {
 
     return newViews;
   }
+
+  async getPopularPosts(): Promise<Post[]> {
+    const postIds = await this.redis.keys('post:*:views'); // 모든 포스트 조회 수 키 가져오기
+
+    // 조회 수가 높은 순으로 정렬
+    postIds.sort((a, b) => {
+      const viewsA = parseInt(a.split(':')[1]);
+      const viewsB = parseInt(b.split(':')[1]);
+      return viewsB - viewsA;
+    });
+
+    const popularPosts = await Promise.all(
+      postIds.map(async (postId) => {
+        const postIdNum = parseInt(postId.split(':')[1]);
+        return await this.postsRepository.findOne({ where: { id: postIdNum } }); // 데이터베이스에서 포스트 정보 가져오기
+      }),
+    );
+
+    return popularPosts;
+  }
 }
