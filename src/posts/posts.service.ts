@@ -20,7 +20,7 @@ export class PostsService {
     private dataSource: DataSource,
   ) {}
 
-  async getByPageAndTag(page, tagId): Promise<Post[]> {
+  async getByPageAndTag(page: number, tagId: number): Promise<Post[]> {
     const postsPerPage = 10; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
 
@@ -55,7 +55,7 @@ export class PostsService {
     }
   }
 
-  async getById(postId) {
+  async getById(postId: number) {
     const post = await this.postsRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.post_tag', 'post_tag')
@@ -71,7 +71,12 @@ export class PostsService {
     return { ...post, views };
   }
 
-  async create(title, content, imgUrl, tagList): Promise<string> {
+  async create(
+    title: string,
+    content: string,
+    imgUrl: string,
+    tagList: string[],
+  ): Promise<string> {
     // console.log(newTagList);
 
     const queryRunner = this.dataSource.createQueryRunner();
