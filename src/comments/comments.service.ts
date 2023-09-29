@@ -1,12 +1,13 @@
 import { CommentsRepository } from './comments.repository';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Comment } from 'src/entities/comment.entity';
 
 @Injectable()
 export class CommentsService {
   constructor(private commentsRepository: CommentsRepository) {}
 
-  async getByPostId(postId) {
+  async getByPostId(postId): Promise<Comment[]> {
     const comments = await this.commentsRepository.find({ where: { postId } });
 
     return comments;
@@ -16,7 +17,6 @@ export class CommentsService {
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
     // const isMatch = await bcrypt.compare('1234', hash);
-    // console.log(isMatch);
 
     const createdComment = await this.commentsRepository.save({
       postId,
