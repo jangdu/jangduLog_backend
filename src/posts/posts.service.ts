@@ -4,12 +4,14 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PostsRepository } from './posts.repository';
 import { DataSource } from 'typeorm';
 import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
 import { RedisClientType } from 'redis';
+import { GetAllPostsDto } from './dto/post.response.dto';
 
 @Injectable()
 export class PostsService {
@@ -20,17 +22,16 @@ export class PostsService {
     private dataSource: DataSource,
   ) {}
 
+  // GET AllPost
   async getByPageAndTag(page: number, tagId: number): Promise<Post[]> {
     const postsPerPage = 50; // 페이지당 게시물 수
     const skip = (page - 1) * postsPerPage;
 
     const query = this.postsRepository.createQueryBuilder('post');
 
-    // 모든 태그 정보 가져오기
     query.leftJoinAndSelect('post.post_tag', 'post_tag');
 
     if (tagId) {
-      // 태그 필터링을 추가
       query.where('post_tag.tagId = :tagId', { tagId });
     }
 
@@ -49,36 +50,45 @@ export class PostsService {
         .take(postsPerPage)
         .getMany();
 
+      if (!posts) {
+        throw new NotFoundException('포스트를 찾을 수 없습니다.');
+      }
+
       return posts;
     } catch (error) {
       throw new InternalServerErrorException('서버에러');
     }
   }
 
-  async getById(postId: number) {
-    const post = await this.postsRepository
-      .createQueryBuilder('post')
-      .leftJoinAndSelect('post.post_tag', 'post_tag')
-      .leftJoinAndSelect('post_tag.tag', 'tag')
-      .leftJoinAndSelect('post.comment', 'comment')
-      .where('post.id = :id', { id: postId })
-      .getOne();
+  // GET ByPostId
+  async getById(postId: number): Promise<GetAllPostsDto> {
+    try {
+      const post = await this.postsRepository
+        .createQueryBuilder('post')
+        .leftJoinAndSelect('post.post_tag', 'post_tag')
+        .leftJoinAndSelect('post_tag.tag', 'tag')
+        .where('post.id = :id', { id: postId })
+        .getOne();
 
-    const views = await this.incrementPostViews(postId);
+      if (!post) {
+        throw new NotFoundException('해당 포스트를 찾을 수 없습니다.');
+      }
 
-    console.log(views);
+      const views = await this.incrementPostViews(postId);
 
-    return { ...post, views };
+      return { post, views };
+    } catch (error) {
+      throw new InternalServerErrorException('서버에러');
+    }
   }
 
+  // CREATE Post
   async create(
     title: string,
     content: string,
     imgUrl: string,
     tagList: string[],
   ): Promise<string> {
-    // console.log(newTagList);
-
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -113,27 +123,24 @@ export class PostsService {
     }
 
     return '포스트가 생성되었습니다.';
-    // return newTagList;
   }
 
   // 레디스 조회수 올려주기
   async incrementPostViews(postId: number): Promise<number> {
-    console.log('들어오긴 했음');
     const redisKey = `post:${postId}:views`;
-    // 레디스에서 현재 조회수 가져오기
+
     const currentViews = await this.redis.get(redisKey);
 
-    // 조회수가 없으면 1로 초기값 설정
     const newViews = currentViews ? parseInt(currentViews) + 1 : 1;
 
-    // 레디스에 조회수 업데이트
     await this.redis.set(redisKey, newViews);
 
     return newViews;
   }
 
+  // 모든 포스트 조회 수 키 가져오기
   async getPopularPosts(): Promise<Post[]> {
-    const postIds = await this.redis.keys('post:*:views'); // 모든 포스트 조회 수 키 가져오기
+    const postIds = await this.redis.keys('post:*:views');
 
     // 조회 수가 높은 순으로 정렬
     postIds.sort((a, b) => {

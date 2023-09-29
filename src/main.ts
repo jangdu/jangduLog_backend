@@ -8,8 +8,8 @@ async function bootstrap() {
 
   // swagger
   const config = new DocumentBuilder()
-    .setTitle('nest showReservation API')
-    .setDescription('공연 예매 사이트 API')
+    .setTitle('nest jangduLog API docs')
+    .setDescription('jangduLog(BlogProject) 개인 블로그 ')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
