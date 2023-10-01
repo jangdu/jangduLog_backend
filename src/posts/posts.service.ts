@@ -158,4 +158,27 @@ export class PostsService {
 
     return popularPosts;
   }
+
+  // Update Posts
+  async updatePost(
+    id: number,
+    title: string,
+    content: string,
+    imgUrl: string,
+  ): Promise<string> {
+    try {
+      const updatedPost = await this.postsRepository.updatePost(
+        id,
+        title,
+        content,
+        imgUrl,
+      );
+
+      if (updatedPost) {
+        return '포스트가 업데이트되었습니다.';
+      }
+    } catch (error) {
+      throw new InternalServerErrorException('서버의 문제로 인해 실패');
+    }
+  }
 }
