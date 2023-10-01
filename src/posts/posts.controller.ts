@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -91,5 +92,20 @@ export class PostsController {
     );
 
     return updatedMessage;
+  }
+
+  @ApiOperation({ summary: '포스트 삭제' })
+  @ApiParam({
+    name: 'postId',
+    description: '삭제할 포스트의 ID',
+    required: true,
+  })
+  @Delete(':postId')
+  async delete(@Param() param: postIdParamDto): Promise<string> {
+    const { postId } = param;
+
+    const deletedMessage = await this.postsService.deletePost(postId);
+
+    return deletedMessage;
   }
 }

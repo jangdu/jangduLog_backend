@@ -181,4 +181,23 @@ export class PostsService {
       throw new InternalServerErrorException('서버의 문제로 인해 실패');
     }
   }
+
+  // 포스트 삭제
+  async deletePost(postId: number): Promise<string> {
+    try {
+      const deletedPost = await this.postsRepository.findOne({
+        where: { id: postId },
+      });
+
+      if (!deletedPost) {
+        throw new NotFoundException('삭제할 포스트를 찾을 수 없습니다.');
+      }
+
+      await this.postsRepository.remove(deletedPost);
+
+      return '포스트가 삭제되었습니다.';
+    } catch (error) {
+      throw new InternalServerErrorException('서버의 문제로 인해 실패');
+    }
+  }
 }
