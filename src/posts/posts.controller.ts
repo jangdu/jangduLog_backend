@@ -1,6 +1,18 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostRequestDto } from './dto/post.request.dto';
+import {
+  CreatePostRequestDto,
+  UpdatePostRequestDto,
+} from './dto/post.request.dto';
 import { Post as PostEntity } from 'src/entities/post.entity';
 import { GetAllPostsDto } from './dto/post.response.dto';
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -59,5 +71,41 @@ export class PostsController {
     );
 
     return createdMessage;
+  }
+
+  // Update Posts
+  @ApiOperation({ summary: '포스트 수정' })
+  @ApiParam({ name: 'postId', description: 'post id', required: true })
+  @Patch(':postId')
+  async update(
+    @Param() param: postIdParamDto,
+    @Body() body: UpdatePostRequestDto,
+  ): Promise<string> {
+    const { postId } = param;
+    const { title, content, imgUrl } = body;
+
+    const updatedMessage = await this.postsService.updatePost(
+      postId,
+      title,
+      content,
+      imgUrl,
+    );
+
+    return updatedMessage;
+  }
+
+  @ApiOperation({ summary: '포스트 삭제' })
+  @ApiParam({
+    name: 'postId',
+    description: '삭제할 포스트의 ID',
+    required: true,
+  })
+  @Delete(':postId')
+  async delete(@Param() param: postIdParamDto): Promise<string> {
+    const { postId } = param;
+
+    const deletedMessage = await this.postsService.deletePost(postId);
+
+    return deletedMessage;
   }
 }

@@ -12,6 +12,7 @@ import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
 import { RedisClientType } from 'redis';
 import { GetAllPostsDto } from './dto/post.response.dto';
+import { Post_TagsRepository } from 'src/posts/post_tag.repository';
 
 @Injectable()
 export class PostsService {
@@ -19,6 +20,7 @@ export class PostsService {
     @Inject('REDIS_CLIENT') private readonly redis: RedisClientType,
     private postsRepository: PostsRepository,
     private tagsRepository: TagsRepository,
+    private post_tagsRepository: Post_TagsRepository,
     private dataSource: DataSource,
   ) {}
 
@@ -157,5 +159,38 @@ export class PostsService {
     );
 
     return popularPosts;
+  }
+
+  // Update Posts
+  async updatePost(
+    id: number,
+    title: string,
+    content: string,
+    imgUrl: string,
+  ): Promise<string> {
+    try {
+      const updatedPost = await this.postsRepository.updatePost(
+        id,
+        title,
+        content,
+        imgUrl,
+      );
+      return '포스트가 업데이트되었습니다.';
+    } catch (error) {
+      throw new InternalServerErrorException('서버의 문제로 인해 실패');
+    }
+  }
+
+  // Delete Posts
+  async deletePost(id: number): Promise<string> {
+    try {
+      await this.post_tagsRepository.deleteByPostId(id);
+
+      await this.postsRepository.deletePost(id);
+
+      return '포스트가 삭제되었습니다.';
+    } catch (error) {
+      throw new InternalServerErrorException('서버의 문제로 인해 실패');
+    }
   }
 }

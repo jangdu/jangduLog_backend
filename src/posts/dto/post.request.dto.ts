@@ -17,3 +17,8 @@ export class CreatePostRequestDto extends PickType(Post, [
   })
   tagList: string[];
 }
+export class UpdatePostRequestDto extends PickType(Post, [
+  'title',
+  'content',
+  'imgUrl',
+]) {}
