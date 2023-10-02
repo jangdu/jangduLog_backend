@@ -34,7 +34,7 @@ export class Post extends CommonEntity {
   @Column('text')
   imgUrl: string;
 
-  @OneToMany(() => Post_Tag, (post_tag) => post_tag.post)
+  @OneToMany(() => Post_Tag, (post_tag) => post_tag.post, { cascade: true })
   post_tag: Post_Tag[];
 
   @OneToMany(() => Comment, (comment) => comment.post)

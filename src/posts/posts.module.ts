@@ -9,10 +9,20 @@ import { Tag } from 'src/entities/tag.entity';
 import { TagsRepository } from 'src/tags/tags.repository';
 import { RedisModule } from 'src/redis/redis.module';
 import { RanksController } from './rank.controller';
+import { Post_Tag } from 'src/entities/post_tag.entity';
+import { Post_TagsRepository } from './post_tag.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Post, Comment, Tag]), RedisModule],
+  imports: [
+    TypeOrmModule.forFeature([Post, Comment, Tag, Post_Tag]),
+    RedisModule,
+  ],
   controllers: [PostsController, RanksController],
-  providers: [PostsService, PostsRepository, TagsRepository],
+  providers: [
+    PostsService,
+    PostsRepository,
+    TagsRepository,
+    Post_TagsRepository,
+  ],
 })
 export class PostsModule {}

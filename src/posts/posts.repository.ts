@@ -37,4 +37,21 @@ export class PostsRepository extends Repository<Post> {
       throw new InternalServerErrorException('서버의 문제로 인해 실패');
     }
   }
+
+  // Delete Posts
+  async deletePost(id: number): Promise<void> {
+    try {
+      const postToDelete = await this.findOne({ where: { id } });
+
+      if (!postToDelete) {
+        throw new NotFoundException('삭제할 포스트를 찾을 수 없습니다.');
+      }
+
+      await this.remove(postToDelete);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        '포스트 삭제 중에 오류가 발생했습니다.',
+      );
+    }
+  }
 }
