@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Post_Tag } from 'src/entities/post_Tag.entity';
+import { Post_Tag } from 'src/entities/post_tag.entity';
 
 import { DataSource, Repository } from 'typeorm';
 
