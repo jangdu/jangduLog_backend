@@ -9,7 +9,7 @@ import {
 import { PostsRepository } from './posts.repository';
 import { Post } from 'src/entities/post.entity';
 import { RedisClientType } from 'redis';
-import { GetAllPostsDto } from './dto/post.response.dto';
+import { GetPostsDto } from './dto/post.response.dto';
 import { Post_TagsRepository } from 'src/posts/post_tag.repository';
 
 @Injectable()
@@ -21,63 +21,27 @@ export class PostsService {
   ) {}
 
   // GET AllPost
-  async getByPageAndTag(page: number, tagId: number): Promise<Post[]> {
-    const postsPerPage = 50; // 페이지당 게시물 수
-    const skip = (page - 1) * postsPerPage;
+  async getByPageAndTag(tagId: number): Promise<Post[]> {
+    const posts = await this.postsRepository.getByTag(tagId);
 
-    const query = this.postsRepository.createQueryBuilder('post');
-
-    query.leftJoinAndSelect('post.post_tag', 'post_tag');
-
-    if (tagId) {
-      query.where('post_tag.tagId = :tagId', { tagId });
+    if (!posts) {
+      throw new NotFoundException('해당 포스트를 찾을 수 없습니다.');
     }
 
-    try {
-      const posts = await query
-        .orderBy('post.createdAt', 'DESC')
-        .select([
-          'post.id',
-          'post.createdAt',
-          'post.updatedAt',
-          'post.title',
-          'post.imgUrl',
-          'post_tag.tag',
-        ])
-        .skip(skip)
-        .take(postsPerPage)
-        .getMany();
-
-      if (!posts) {
-        throw new NotFoundException('포스트를 찾을 수 없습니다.');
-      }
-
-      return posts;
-    } catch (error) {
-      throw new InternalServerErrorException('서버에러');
-    }
+    return posts;
   }
 
   // GET ByPostId
-  async getById(postId: number): Promise<GetAllPostsDto> {
-    try {
-      const post = await this.postsRepository
-        .createQueryBuilder('post')
-        .leftJoinAndSelect('post.post_tag', 'post_tag')
-        .leftJoinAndSelect('post_tag.tag', 'tag')
-        .where('post.id = :id', { id: postId })
-        .getOne();
+  async getById(postId: number): Promise<GetPostsDto> {
+    const post = await this.postsRepository.getById(postId);
 
-      if (!post) {
-        throw new NotFoundException('해당 포스트를 찾을 수 없습니다.');
-      }
-
-      const views = await this.incrementPostViews(postId);
-
-      return { post, views };
-    } catch (error) {
-      throw new InternalServerErrorException('서버에러');
+    if (!post) {
+      throw new NotFoundException('해당 포스트를 찾을 수 없습니다.');
     }
+
+    const views = await this.incrementPostViews(postId);
+
+    return { post, views };
   }
 
   // CREATE Post

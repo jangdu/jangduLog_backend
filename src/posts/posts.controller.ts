@@ -14,7 +14,7 @@ import {
   UpdatePostRequestDto,
 } from './dto/post.request.dto';
 import { Post as PostEntity } from 'src/entities/post.entity';
-import { GetAllPostsDto } from './dto/post.response.dto';
+import { GetPostsDto } from './dto/post.response.dto';
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { postIdParamDto } from 'src/dto/post.id.param.dto';
 
@@ -31,16 +31,12 @@ export class PostsController {
   })
   @Get()
   async getAll(@Query() query): Promise<PostEntity[]> {
-    let { page, tagId } = query;
-
-    if (page === null || page === undefined) {
-      page = 1;
-    }
-    if (tagId === null || tagId === undefined || tagId === '0') {
+    let { tagId } = query;
+    if (!tagId || tagId === '0') {
       tagId = 0;
     }
 
-    const posts = await this.postsService.getByPageAndTag(page, tagId);
+    const posts = await this.postsService.getByPageAndTag(tagId);
 
     return posts;
   }
@@ -48,7 +44,7 @@ export class PostsController {
   @ApiOperation({ summary: '포스트 id로 글 검색' })
   @ApiParam({ name: 'postId', description: 'post id', required: true })
   @Get(':postId')
-  async getById(@Param() param: postIdParamDto): Promise<GetAllPostsDto> {
+  async getById(@Param() param: postIdParamDto): Promise<GetPostsDto> {
     const { postId } = param;
 
     const post = await this.postsService.getById(postId);

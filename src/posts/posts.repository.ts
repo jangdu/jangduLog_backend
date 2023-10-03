@@ -8,6 +8,7 @@ import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
 import { TagsRepository } from 'src/tags/tags.repository';
 import { DataSource, Repository } from 'typeorm';
+import { GetPostsDto } from './dto/post.response.dto';
 
 @Injectable()
 export class PostsRepository extends Repository<Post> {
@@ -16,6 +17,48 @@ export class PostsRepository extends Repository<Post> {
     private tagsRepository: TagsRepository,
   ) {
     super(Post, dataSource.createEntityManager());
+  }
+
+  async getByTag(tagId: number): Promise<Post[]> {
+    const query = this.createQueryBuilder('post');
+
+    query.leftJoinAndSelect('post.post_tag', 'post_tag');
+
+    if (tagId) {
+      query.where('post_tag.tagId = :tagId', { tagId });
+    }
+
+    try {
+      const posts = await query
+        .orderBy('post.createdAt', 'DESC')
+        .select([
+          'post.id',
+          'post.createdAt',
+          'post.updatedAt',
+          'post.title',
+          'post.imgUrl',
+          'post_tag.tag',
+        ])
+        .getMany();
+
+      return posts;
+    } catch (error) {
+      throw new InternalServerErrorException('서버에러');
+    }
+  }
+
+  async getById(postId: number): Promise<Post> {
+    try {
+      const post = await this.createQueryBuilder('post')
+        .leftJoinAndSelect('post.post_tag', 'post_tag')
+        .leftJoinAndSelect('post_tag.tag', 'tag')
+        .where('post.id = :id', { id: postId })
+        .getOne();
+
+      return post;
+    } catch (error) {
+      throw new InternalServerErrorException('서버에러');
+    }
   }
 
   async createPost(
@@ -56,7 +99,6 @@ export class PostsRepository extends Repository<Post> {
     } finally {
       await queryRunner.release();
     }
-
     return '포스트가 생성되었습니다.';
   }
 
