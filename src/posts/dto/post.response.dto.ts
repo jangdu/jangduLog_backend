@@ -3,7 +3,7 @@ import { Post } from 'src/entities/post.entity';
 
 export class PostDto {}
 
-export class GetAllPostsDto {
+export class GetPostsDto {
   @ApiProperty({
     type: Post,
   })
