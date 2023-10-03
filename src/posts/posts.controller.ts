@@ -36,8 +36,6 @@ export class PostsController {
     if (page === null || page === undefined) {
       page = 1;
     }
-
-    // tag가 null인 경우 기본 태그를 설정
     if (tagId === null || tagId === undefined || tagId === '0') {
       tagId = 0;
     }

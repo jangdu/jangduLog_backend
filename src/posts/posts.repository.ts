@@ -1,15 +1,63 @@
 import {
+  BadGatewayException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Post } from 'src/entities/post.entity';
+import { Post_Tag } from 'src/entities/post_tag.entity';
+import { TagsRepository } from 'src/tags/tags.repository';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class PostsRepository extends Repository<Post> {
-  constructor(private datasource: DataSource) {
-    super(Post, datasource.createEntityManager());
+  constructor(
+    private dataSource: DataSource,
+    private tagsRepository: TagsRepository,
+  ) {
+    super(Post, dataSource.createEntityManager());
+  }
+
+  async createPost(
+    title: string,
+    content: string,
+    imgUrl: string,
+    tagList: string[],
+  ): Promise<string> {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const createdPost = await queryRunner.manager.getRepository(Post).save({
+        title,
+        content,
+        imgUrl,
+      });
+
+      const newTagList = await Promise.all(
+        tagList.map(async (tag) => {
+          const newTag = await this.tagsRepository.findOrCreateTag(tag);
+
+          const newPostTag = await queryRunner.manager
+            .getRepository(Post_Tag)
+            .insert({
+              postId: createdPost.id,
+              tagId: newTag.id,
+            });
+        }),
+      );
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException('서버의 문제로 인해 실패');
+    } finally {
+      await queryRunner.release();
+    }
+
+    return '포스트가 생성되었습니다.';
   }
 
   // Update Posts
