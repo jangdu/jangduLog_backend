@@ -34,3 +34,7 @@
 - **Redis :** 가장 조회가 많이 일어나는 첫 페이지를 캐싱해 응답속도 개선 **( 240ms -> 92ms )**
 - LoggerMiddleware를 사용해 api 모니터링
 - nestjs/swagger를 사용해 편리한 API문서 작성 ([https://jangdu.site/api/docs](https://jangdu.site/api/docs))
+
+### tag기능
+
+![](https://res.cloudinary.com/dyhnnmhcf/image/upload/v1696658091/%E1%84%87%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A9%E1%84%80%E1%85%B3%E1%84%90%E1%85%A2%E1%84%80%E1%85%B3_fn7rlt.gif)
