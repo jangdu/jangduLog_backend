@@ -23,17 +23,18 @@
 
 ### **주요 구현 내용**
 
-- ReactJS, firebase를 사용해서 프론트엔드 구현( 2023.03 )
-- **firebase -> nest.js**
-  - firebase를 사용해 간단한 DB를 구축했지만,
-    이후 데이터관리 및 기능 추가 시 불편한 문제 발생
-    **->** **nest.js, mysql(typeorm)로 백엔드 구현 ( 2023.09 ~ )**
+Swagger **:** frontend와의 소통을 위해서 dto, nest-swagger를 사용한 [**문서 작성 자동화**](https://jangdu.site/api/docs)
+
+React를 활용한 프론트엔드 구현
+
 - CloudFront, S3, EC2, RDS를 사용한 배포
-  - 반복적인 빌드, 배포의 불편
-    **->** CodeDeploy를 사용해 **CI/CD** **배포 자동화를 통해 효율적인 개발 환경 구성** ([https://blog.jangdu.site/posts/7](https://blog.jangdu.site/posts/7))
-- **Redis :** 가장 조회가 많이 일어나는 첫 페이지를 캐싱해 응답속도 개선 **( 240ms -> 92ms )**
-- LoggerMiddleware를 사용해 api 모니터링
-- nestjs/swagger를 사용해 편리한 API문서 작성 ([https://jangdu.site/api/docs](https://jangdu.site/api/docs))
+  - 반복적인 빌드, 배포의 불편을 느껴 \***\*CodeDeploy를 사용한 **[배포 자동화를 통해 효율적인 개발 환경 구성](https://blog.jangdu.site/posts/7)\*\*
+  - 빌드하는 과정 중 문제 발생 시, 배포를 하지않고 중단하도록 구현, 추후 테스트코드 추가 예정
+
+Nest.js, MySQL을 사용한 백엔드 구현
+
+- Firebase를 통한 간단한 DB구축 후, N**est.js로 마이그레이션 백엔드 구현 진행중(2023.09 ~)**
+  - 태그 기능을 구현하며 데이터 무결성 및 [트랜잭션 관리와 확장성에 용이한 RDBMS의 필요성](https://github.com/jangdu/jangduLog_backend/blob/f4c6682a23b41800f12aad85699274dc529b092e/src/posts/posts.repository.ts#L64C20-L64C20)을 느껴서 MySQL선택
 
 ### tag기능
 
