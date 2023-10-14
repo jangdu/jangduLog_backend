@@ -11,6 +11,7 @@ import { Post } from 'src/entities/post.entity';
 import { RedisClientType } from 'redis';
 import { GetPostsDto } from './dto/post.response.dto';
 import { Post_TagsRepository } from 'src/posts/post_tag.repository';
+import { sendEmail } from 'src/email/email.service';
 
 @Injectable()
 export class PostsService {
@@ -57,6 +58,9 @@ export class PostsService {
       imgUrl,
       tagList,
     );
+
+    const emailContent = `새로운 글이 게시되었습니다: ${title}`;
+    sendEmail('jjd0324@gmail.com', '새로운 글 게시 알림', emailContent);
 
     return createPostMessage;
   }
