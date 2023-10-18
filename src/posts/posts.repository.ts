@@ -8,7 +8,6 @@ import { Post } from 'src/entities/post.entity';
 import { Post_Tag } from 'src/entities/post_tag.entity';
 import { TagsRepository } from 'src/tags/tags.repository';
 import { DataSource, Repository } from 'typeorm';
-import { GetPostsDto } from './dto/post.response.dto';
 
 @Injectable()
 export class PostsRepository extends Repository<Post> {
